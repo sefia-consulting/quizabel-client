@@ -1,0 +1,786 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Designer</title>
+<link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="./lib/animate/animate.css" />
+<link rel="stylesheet" href="./lib/featherlight/featherlight.min.css" />
+<link rel="stylesheet" href="./lib/designer/jquery.designer.css" />
+<link rel="stylesheet" href="./css/designer.css" />
+</head>
+
+<body>
+<div class="nav" role="navigation">
+	<ul class="breadcrumb">
+		<li><a class="home" href="/">Home</a></li>
+		<li><a class="list" href="/list.html">List</a></li>
+		<li>Design Quiz</li>
+	</ul>
+</div>
+
+<div class="designer-container">
+	<h2 contenteditable="true" id="decision-tree-name" class="loading">Loading...</h2>
+	<div id="decision-tree-details-container">
+	<small id="decision-tree-details-toggle" data-toggle="collapse" data-target="#decision-tree-details">Show Details</small>
+	<div id="decision-tree-details" class="collapse">
+
+
+		<form action="#" class="form-horizontal form-condensed" id="decision-tree-form">
+			<input type="hidden" value="" name="decisionTree.id"/>
+			<input type="hidden" value="" name="decisionTree.version"/>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label for="requireLogin" class="control-label  col-sm-4">
+							Code
+						</label>
+						<div class="col-md-8">
+							<input class="form-control input-sm" name="decisionTree.code" type="text" value=""/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="requireLogin" class="control-label  col-sm-8">
+							Require Login
+						</label>
+						<div class="col-md-4">
+						    <input type="checkBox" class="form-control input-sm" name="requireLogin"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="saveUncommitted" class="control-label  col-sm-8">
+							Save Uncommitted
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="saveUncommitted"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="allowRestart" class="control-label  col-sm-8">
+							Allow Restart
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="allowRestart"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="timeLimit" class="control-label  col-sm-3">
+							Time Limit
+						</label>
+						<div class="col-md-9">
+						    <input type="number" class="form-control input-sm" name="timeLimit"/>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="showName" class="control-label  col-sm-8">
+							Show Name
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="showName"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="showContext" class="control-label  col-sm-8">
+							Show Context
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="showContext"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="showRecap" class="control-label  col-sm-8">
+							Show Recap
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="showRecap"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="showCorrect" class="control-label  col-sm-8">
+							Show Correct
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="showCorrect"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="showPoints" class="control-label  col-sm-8">
+							Show Points
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="showPoints"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="showTotals" class="control-label  col-sm-8">
+							Show Totals
+						</label>
+						<div class="col-md-4">
+						    <input type="checkbox" class="form-control input-sm" name="showTotals"/>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group  form-group-sm">
+						<label for="contextTokenMode" class="control-label col-sm-4">
+							Access Code
+						</label>
+						<div class="col-sm-8">
+						    <select class="form-control input-sm" name="contextTokenMode" required="">
+								<option>None</option>
+								<option>Context Token Supported</option>
+								<option>Context Token Required</option>
+						    </select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label class="control-label col-sm-4" for="contextTokenValidation">
+							Code Validation
+						</label>
+						<div class="col-md-8">
+							<textarea class="form-control input-sm" name="contextTokenValidation"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group form-group-sm">
+						<label for="contextTokenOneTime" class="control-label col-sm-8">
+							One-Time Codes
+						</label>
+						<div class="col-sm-4">
+						    <input type="checkbox" class="form-control input-sm" name="contextTokenOneTime"/>
+
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+			<div class="row">
+
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label for="imageUri" class="control-label col-sm-4 image-label">
+							Image URI
+						</label>
+						<div class="col-sm-8">
+						    <input class="form-control input-sm" name="imageUri"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label for="finishImageUri" class="control-label col-sm-4 image-label">
+							Finish Image URI
+						</label>
+						<div class="col-sm-8">
+						    <input class="form-control input-sm" name="finishImageUri"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label for="finishRedirectUri" class="control-label col-sm-4 link-label">
+							Finish Link
+						</label>
+						<div class="col-sm-8">
+						    <input class="form-control input-sm" name="finishRedirectUri"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label class="control-label col-sm-4">
+							Description
+						</label>
+						<div class="col-md-8">
+							<textarea class="form-control input-sm" name="description" id="description">
+							</textArea>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label class="control-label col-sm-4">
+							Welcome Message
+						</label>
+						<div class="col-md-8">
+							<textarea class="form-control input-sm" name="welcomeMessage"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label class="control-label col-sm-4">
+							Recap Message
+						</label>
+						<div class="col-md-8">
+							<textarea class="form-control input-sm" name="finishMessage"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group form-group-sm">
+						<label class="control-label col-sm-4">
+							Theme
+						</label>
+						<div class="col-md-8">
+							<select name="theme" class="form-control">
+								<option value="themes/default/custom-bootstrap.css">Default</option>
+								<option value="themes/cerulean/custom-bootstrap.css">Cerulean</option>
+								<option value="themes/cosmo/custom-bootstrap.css">Cosmo</option>
+								<option value="themes/cyborg/custom-bootstrap.css">Cyborg</option>
+								<option value="themes/darkly/custom-bootstrap.css">Darkly</option>
+								<option value="themes/flatly/custom-bootstrap.css">Flatly</option>
+								<option value="themes/journal/custom-bootstrap.css">Journal</option>
+								<option value="themes/lumen/custom-bootstrap.css">Lumen</option>
+								<option value="themes/paper/custom-bootstrap.css">Paper</option>
+								<option value="themes/readable/custom-bootstrap.css">Readable</option>
+								<option value="themes/sandstone/custom-bootstrap.css">Sandstone</option>
+								<option value="themes/simplex/custom-bootstrap.css">Simplex</option>
+								<option value="themes/slate/custom-bootstrap.css">Slate</option>
+								<option value="themes/spacelab/custom-bootstrap.css">Spacelab</option>
+								<option value="themes/superhero/custom-bootstrap.css">Superhero</option>
+								<option value="themes/united/custom-bootstrap.css">United</option>
+								<option value="themes/yeti/custom-bootstrap.css">Yeti</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+
+
+	</div>
+	</div>
+	<div class="row" style="padding-top:10px;">
+	<div class="col-md-2" style="padding-bottom:10px;">
+		<button class="btn btn-default btn-sm" id="create-question">New Question</button>
+	</div>
+	<div class="col-md-10 text-right" style="padding-bottom:10px;">
+		<button class="btn btn-primary btn-sm" id="save-decision-tree">Commit</button>
+		
+		<button class="btn btn-default btn-sm" type="button" id="revert-decision-tree" disabled>Revert</button>
+		
+		<button class="btn btn-default btn-sm edit-feature" id="take-decision-tree">Take</button>
+
+		<button class="btn btn-default btn-sm edit-feature" id="results-decision-tree">Results</button>
+
+		<a href="/index.html">
+		<button class="btn btn-default btn-sm new-feature" id="cancel-decision-tree">Cancel</button>
+		</a>
+		<!--button class="btn btn-warning" id="debug">Debug</button-->
+	</div>
+	</div>
+	<!-- CANVAS -->
+	<div id="decision-tree-canvas-container">
+	<div id="decision-tree-canvas"></div>
+	</div>
+
+
+</div>
+<!-- Modal -->
+<div id="question-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Question</h4>
+			</div>
+			<div class="modal-body">
+
+
+				<form action="#">
+					<input name="question-id" type="hidden"/>
+					<div class="form-group">
+						<label for="displayText" class="control-label">
+						Question text
+						</label>
+						<div>
+							<input name="displayText" type="text" class="form-control"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-5">
+							<div class="form-group">
+								<label for="displayText" class="control-label">
+								Question type
+								</label>
+								<div>
+									<select name="questionType" class="form-control">
+										<option value="singleMultipleChoice">Single Multiple Choice</option>
+										<option value="multipleMultipleChoice">Multiple Multiple Choice</option>
+										<option value="shortAnswer">Short Answer</option>
+										<option value="scale">Scale</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="answerRequired" class="control-label">
+									Required
+								</label>
+								<div>
+								    <input type="checkbox" class="form-control" name="answerRequired"></input>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="allowBack" class="control-label">
+									<nobr>Allow Back</nobr>
+								</label>
+								<div>
+								    <input type="checkbox" class="form-control input-sm" name="allowBack"></input>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 type-specific-group multipleMultipleChoice-group">
+							<div class="form-group">
+								<label for="question.maxAnswers" class="control-label">
+									<nobr>Max Answers</nobr>
+								</label>
+								<div>
+								    <input type="number" class="form-control" name="question.maxAnswers" placeholder="0"/>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group">
+						<label for="imageURI" class="control-label image-label">
+						Image URI
+						</label>
+						<div>
+							<input name="imageURI" type="text" class="form-control"/>
+						</div>
+					</div>
+
+					<div class="row type-specific-group scale-group">
+					<div class="form-group col-sm-4">
+						<label for="question.min" class="control-label">
+						Min
+						</label>
+						<div>
+							<input name="question.min" type="number" class="form-control" placeholder="1" min="1"/>
+						</div>
+					</div>
+					<div class="form-group col-sm-4">
+						<label for="question.max" class="control-label">
+						Max
+						</label>
+						<div>
+							<input name="question.max" type="number" class="form-control" placeholder="10" min="1"/>
+						</div>
+					</div>
+					<div class="form-group col-sm-4">
+						<label for="question.step" class="control-label">
+						Step
+						</label>
+						<div>
+							<input name="question.step" type="number" class="form-control" placeholder="1" min="1"/>
+						</div>
+					</div>
+					</div>
+
+					<div class="row type-specific-group scale-group">
+					<div class="form-group col-sm-4">
+						<label for="question.defaultValue" class="control-label">
+						Default
+						</label>
+						<div>
+							<input name="question.defaultValue" type="number" class="form-control" placeholder=""/>
+						</div>
+					</div>
+					<div class="form-group col-sm-4">
+						<label for="question.symbol" class="control-label">
+						Symbol <i id="symbol-icon" class=""></i>
+						</label>
+						<div>
+							<select name="question.symbol" class="form-control" data-icon="#symbol-icon">
+								<option value="fa fa-circle">Circle</option>
+								<option value="fa fa-circle-o">Open Circle</option>
+								<option value="fa fa-smile-o">Smile <span class="fa fa-smile-o"></span></option>
+								<option value="fa fa-meh-o">Meh</option>
+								<option value="fa fa-thumbs-up">Thumbs Up</option>
+								<option value="fa fa-thumbs-o-up">Open Thumbs Up</option>
+								<option value="fa fa-user">User</option>
+								<option value="fa fa-user-o">Open User</option>
+								<option value="fa fa-comment">Comment</option>
+								<option value="fa fa-comment-o">Open Comment</option>
+								<option value="fa fa-flag">Flag</option>
+								<option value="fa fa-flag-o">Open Flag</option>
+								<option value="glyphicon glyphicon-ok-sign">Check mark</option>
+								<option value="glyphicon glyphicon-ok-circle">Open Check mark</option>
+								<option value="glyphicon glyphicon-star">Star</option>
+								<option value="glyphicon glyphicon-star-empty">Empty Star</option>
+								<option value="glyphicon glyphicon-heart">Heart</option>
+								<option value="glyphicon glyphicon-heart-empty">Empty Heart</option>
+								<option value="glyphicon glyphicon-expand">Box Arrow</option>
+								<option value="glyphicon glyphicon-collapse-up">Box Up</option>
+								<option value="glyphicon glyphicon-collapse-down">Box Down</option>
+								<option value="glyphicon glyphicon-unchecked">Empty Box</option>
+								<option value="glyphicon glyphicon-remove-sign">Remove</option>
+								<option value="glyphicon glyphicon-remove-circle">Empty Remove</option>
+								<option value="glyphicon glyphicon-eye-open">Eye Open</option>
+								<option value="glyphicon glyphicon-eye-close">Eye Close</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group col-sm-4">
+						<label for="question.symbolEmpty" class="control-label">
+						Empty Symbol <i id="empty-symbol-icon" class=""></i>
+						</label>
+						<div>
+							<select name="question.symbolEmpty" class="form-control" data-icon="#empty-symbol-icon">
+								<option value="fa fa-circle">Circle</option>
+								<option value="fa fa-circle-o">Open Circle</option>
+								<option value="fa fa-smile-o">Smile</option>
+								<option value="fa fa-meh-o">Meh</option>
+								<option value="fa fa-thumbs-up">Thumbs Up</option>
+								<option value="fa fa-thumbs-o-up">Open Thumbs Up</option>
+								<option value="fa fa-user">User</option>
+								<option value="fa fa-user-o">Open User</option>
+								<option value="fa fa-comment">Comment</option>
+								<option value="fa fa-comment-o">Open Comment</option>
+								<option value="fa fa-flag">Flag</option>
+								<option value="fa fa-flag-o">Open Flag</option>
+								<option value="glyphicon glyphicon-ok-sign">Check mark</option>
+								<option value="glyphicon glyphicon-ok-circle">Open Check mark</option>
+								<option value="glyphicon glyphicon-star">Star</option>
+								<option value="glyphicon glyphicon-star-empty">Empty Star</option>
+								<option value="glyphicon glyphicon-heart">Heart</option>
+								<option value="glyphicon glyphicon-heart-empty">Empty Heart</option>
+								<option value="glyphicon glyphicon-expand">Box Arrow</option>
+								<option value="glyphicon glyphicon-collapse-up">Box Up</option>
+								<option value="glyphicon glyphicon-collapse-down">Box Down</option>
+								<option value="glyphicon glyphicon-unchecked">Empty Box</option>
+								<option value="glyphicon glyphicon-remove-sign">Remove</option>
+								<option value="glyphicon glyphicon-remove-circle">Empty Remove</option>
+								<option value="glyphicon glyphicon-eye-open">Eye Open</option>
+								<option value="glyphicon glyphicon-eye-close">Eye Close</option>
+							</select>
+						</div>
+					</div>
+
+					</div>					
+					<div class="row type-specific-group scale-group">
+					<div class="form-group col-md-4">
+						<label for="question.leftLabel" class="control-label">
+						Left Label
+						</label>
+						<div>
+							<input name="question.leftLabel" type="text" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="question.centerLabel" class="control-label">
+						Center Label
+						</label>
+						<div>
+							<input name="question.centerLabel" type="text" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="question.rightLabel" class="control-label">
+						Right Label
+						</label>
+						<div>
+							<input name="question.rightLabel" type="text" class="form-control"/>
+						</div>
+					</div>
+					</div>
+					<div class="form-group type-specific-group answer-validation-group shortAnswer-group scale-group">
+						<label for="displayText" class="control-label">
+						Validation
+						</label>
+						<div>
+							<input name="question.validation" type="text" class="form-control"></input>
+						</div>
+					</div>
+
+					<div class="form-group type-specific-group singleMultipleChoice-group multipleMultipleChoice-group" id="answers-container">
+						<label for="displayText">
+						Answers
+						</label>
+						<div>
+							<div id="answers" style="margin-bottom:10px">
+							</div>
+							<div class="row">
+								<div class="col-md-offset-2 col-md-6 text-right">
+								<input type="text" class="form-control input-sm" name="new-answer" style="width:100%;"/>
+								</div>
+								<div class="col-md-2">
+								<button id="add-answer-btn" type="button" class="btn btn-sm btn-info" style="width:100%;">
+								Add
+								</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="text-right">
+					<small id="question-details-toggle" data-toggle="collapse" data-target="#advanced-question-details">Show/Hide Advanced</small>
+					</div>
+					<div id="advanced-question-details" class="collapse">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="points" class="control-label">
+								Points
+								</label>
+								<div>
+									<input name="points" type="number" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="timeLimit" class="control-label">
+								Time Limit
+								</label>
+								<div>
+									<input name="question.timeLimit" type="number" class="form-control"/>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="displayText" class="control-label">
+							Recap Message
+							</label>
+							<div>
+								<textarea name="question.finishMessage" type="text" class="form-control"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="destinationURI" class="control-label link-label">
+							Destination URI
+							</label>
+							<div>
+								<input name="destinationURI" type="text" class="form-control"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="moreInfoURI" class="control-label link-label">
+							More Info URI
+							</label>
+							<div>
+								<input name="moreInfoURI" type="text" class="form-control"/>
+							</div>
+						</div>
+						<div class="form-group" id="question-attributes-container">
+							<label for="displayText">
+							Attributes
+							</label>
+							<div>
+								<div id="question-attributes" class="attributes" style="margin-bottom:10px">
+								</div>
+								<div class="row">
+									<div class="col-md-offset-1 col-md-4 text-right">
+									<input type="text" class="form-control input-sm" name="question-attribute-name" style="width:100%;" placeholder="Name" />
+									</div>
+									<div class="col-md-4 text-right">
+									<input type="text" class="form-control input-sm" name="question-attribute-value" style="width:100%;" placeholder="Value"/>
+									</div>
+									<div class="col-md-2">
+									<button type="button" class="add-attribute-btn btn btn-sm btn-info" style="width:100%;" data-attribute-value="[name='question-attribute-value']"  data-attribute-name="[name='question-attribute-name']" data-attributes-container="#question-attributes">
+									Add
+									</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+					</div>
+
+				</form>
+
+				
+			</div>
+			<div class="modal-footer">
+				<button id="question-save" type="button" class="btn btn-primary">
+					Update
+				</button>
+				<button id="question-delete" type="button" class="btn btn-danger">
+					Remove
+				</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Cancel
+				</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- Modal -->
+<div id="answer-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Edit Answer</h4>
+			</div>
+			<div class="modal-body">
+
+				<form action="#">
+					<input name="answer.question.code" type="hidden"/>
+					<input name="answer.code" type="hidden"/>
+					<div class="form-group">
+						<label for="displayText" class="control-label">
+						Answer text
+						</label>
+						<div>
+							<input name="answer.displayText" type="text" class="form-control"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="answer.imageURI" class="control-label image-label">
+						Image URI
+						</label>
+						<div>
+							<input name="answer.imageURI" type="text" class="form-control"/>
+						</div>
+					</div>
+					<div>
+						<div class="form-group">
+							<label for="answer.correct" class="control-label">
+								Correct
+							</label>
+							<div>
+							    <input type="checkbox" class="form-control" name="answer.correct"></input>
+							</div>
+						</div>
+					</div>
+					<div class="text-right">
+					<small id="answer-details-toggle" data-toggle="collapse" data-target="#advanced-answer-details">Show/Hide Advanced</small>
+					</div>
+					<div id="advanced-answer-details" class="collapse">
+						<div class="form-group">
+							<label for="answer.value" class="control-label">
+							Value
+							</label>
+							<div>
+								<input name="answer.value" type="text" class="form-control"/>
+							</div>
+						</div>
+
+						<div class="form-group" id="answer-attributes-container">
+							<label for="displayText">
+							Attributes
+							</label>
+							<div>
+								<div id="answer-attributes" class="attributes">
+								</div>
+								<div class="row" style="padding-top:10px">
+									<div class="col-md-offset-1 col-md-4 text-right" style="padding-right: 0;">
+									<input type="text" class="form-control pull-right input-sm" name="answer-attribute-name" style="width:100%;" placeholder="Name" />
+									</div>
+									<div class="col-md-4 text-right" style="padding-right: 0;">
+									<input type="text" class="form-control pull-right input-sm" name="answer-attribute-value" style="width:100%;" placeholder="Value"/>
+									</div>
+									<div class="col-md-2" style="padding-left: 10px;">
+									<button type="button" class="add-attribute-btn btn btn-sm btn-info" style="width:100%;" data-attribute-value="[name='answer-attribute-value']"  data-attribute-name="[name='answer-attribute-name']" data-attributes-container="#answer-attributes">
+									Add
+									</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="answer.finishMessage" class="control-label">
+							Recap Message
+							</label>
+							<div>
+								<textarea name="answer.finishMessage" type="text" class="form-control"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="answer.destinationURI" class="control-label link-label">
+							Destination URI
+							</label>
+							<div>
+								<input name="answer.destinationURI" type="text" class="form-control"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="answer.moreInfoURI" class="control-label link-label">
+							More Info URI
+							</label>
+							<div>
+								<input name="answer.moreInfoURI" type="text" class="form-control"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="answer.displayIndex" class="control-label">
+							Display Index
+							</label>
+							<div>
+								<input name="answer.displayIndex" type="number" class="form-control"/>
+							</div>
+						</div>
+					
+					</div>
+
+				</form>
+
+			</div>
+			<div class="modal-footer">
+				<button id="answer-save" type="button" class="btn btn-primary">Update</button>
+				<button id="answer-delete" type="button" class="btn btn-danger">Remove</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<script type="text/javascript" src="./js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="./js/jquery-ui-1.11.4.min.js"></script>
+<script type="text/javascript" src="./js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="./lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="./lib/designer/jquery.designer.js"></script>
+<script type="text/javascript" src="./lib/notify/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="./lib/featherlight/featherlight.min.js"></script>
+<script type="text/javascript" src="./js/designer.js"></script>
+</body>
+</html>

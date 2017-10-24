@@ -1,0 +1,307 @@
+
+.decision-container {
+	text-align:center;
+	padding:10px;
+/*
+	width:100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%) }
+*/
+}
+.answer-cell {
+	padding:20px;
+}
+.answer-btn {
+	width:100% !important;
+}
+.correct-indicator {
+	font-weight:bold;
+}
+.correct-indicator-true {
+}
+.correct-indicator-false {
+}
+.correct-results {
+	font-weight:bold;
+	font-size:24px;
+}
+.row.single-choice-answer-row {
+	padding:0;
+}
+.multiple-choice-answer-btn {
+	outline: none !important;
+}
+.multiple-choice-answer-btn:hover, .multiple-choice-answer-btn.focus:hover {
+	background-color: white;
+}
+.multiple-choice-answer-btn.active, .multiple-choice-answer-btn.active:hover, .multiple-choice-answer-btn.active.focus, .multiple-choice-answer-btn.active.focus:hover {
+	color: #fff;
+	background-color: #337ab7;
+	border-color: #2e6da4;
+	}
+#multiple-choice-container .btn-group>.btn:not(.dropdown-toggle) {
+	border-radius: 5px;
+}
+#multiple-choice-container .btn-group {
+	display: unset;
+}
+.summary-item-container {
+	padding:10px;
+}
+.summary-item-panel {
+	background-color: #fff;
+	border: 1px solid #e3e3e3;
+	border-radius: 5px;
+	padding:10px;
+}
+.summary-correct {
+	font-weight:bold;
+	font-size:24px;
+	color:#337ab7;
+}
+.summary-points {
+	font-weight:bold;
+	font-size:24px;
+	color:#31708f;
+}
+.summary-question-text {
+	font-size:18px;
+	font-style:italic;
+}
+.summary-question-correct {
+	font-weight: bold;
+}
+.summary-question-correct.correct {
+	color:#3c763d;
+}
+.summary-question-correct.incorrect {
+	color: #a94442;
+}
+.summary-question-points {
+	font-weight: bold;
+}
+.summary-question-title, .summary-answers-title {
+	font-weight: bold;	
+}
+.summary-answer-text {
+	color:#337ab7;
+}
+.more-action-link {
+	cursor: pointer;
+}
+input[name="contextToken"] {
+}
+.single-choice-answer-row, .multiple-choice-answer-row {
+	padding:5px;
+}
+.single-choice-answer-btn, .multiple-choice-answer-btn {
+	width:100%;
+	margin-bottom:5px;
+	margin-top: 5px;
+}
+.btn {
+	font-weight: 500;
+	font-size:18px;
+}
+.submit-container {
+	padding:10px;
+}
+#question-container {
+	padding:0 20px 20px 20px;
+}
+.single-choice-answer-btn.selected {
+	color:#337ab7;
+}
+#question-points-container {
+	font-weight: 500;
+	color:#337ab7;
+	padding:10px;
+}
+#short-answer-submit, #multiple-choice-submit, #start-button, #complete-button {
+	margin:20px;
+}
+
+#multiple-choice-container label.btn {
+ 	width:23% !important;
+ 	float: inherit;
+ 	margin-bottom:10px;
+ 	margin-left:1%;
+ 	margin-right:1%;
+}
+.summary-item-row.row {
+	margin-right: 0px;
+	margin-left: 0px;
+	padding-left:10px;
+	padding-right:10px;
+}
+
+#question-timer {
+	width:100%;
+	height:5px;
+}
+
+#timer-modal-continue {
+	margin-top:20px;
+}
+.summary-timer-expired {
+	color: #a94442;
+}
+.summary-question-average-value {
+	font-weight:500;
+
+}
+#decision-timer {
+	text-align:right;
+	font-weight:500;
+	font-size:20px;
+	opacity: 0.5;
+}
+#scale-left-label,#scale-center-label,#scale-right-label {
+	font-weight:500;
+	color:#888;
+}
+.scale-symbol {
+	font-size:24px;
+	padding:2px;
+	cursor: pointer;
+}
+
+.scale-filled {
+
+}
+
+.scale-empty {
+
+}
+
+#loader {
+    bottom: 0;
+    height: 175px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 175px;
+}
+#loader {
+    bottom: 0;
+    height: 175px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 175px;
+}
+#loader .dot {
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 87.5px;
+}
+#loader .dot::before {
+    border-radius: 100%;
+    content: "";
+    height: 87.5px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: scale(0);
+    width: 87.5px;
+}
+#loader .dot:nth-child(7n+1) {
+    transform: rotate(45deg);
+}
+#loader .dot:nth-child(7n+1)::before {
+    animation: 0.8s linear 0.1s normal none infinite running load;
+    background: #00ff80 none repeat scroll 0 0;
+}
+#loader .dot:nth-child(7n+2) {
+    transform: rotate(90deg);
+}
+#loader .dot:nth-child(7n+2)::before {
+    animation: 0.8s linear 0.2s normal none infinite running load;
+    background: #00ffea none repeat scroll 0 0;
+}
+#loader .dot:nth-child(7n+3) {
+    transform: rotate(135deg);
+}
+#loader .dot:nth-child(7n+3)::before {
+    animation: 0.8s linear 0.3s normal none infinite running load;
+    background: #00aaff none repeat scroll 0 0;
+}
+#loader .dot:nth-child(7n+4) {
+    transform: rotate(180deg);
+}
+#loader .dot:nth-child(7n+4)::before {
+    animation: 0.8s linear 0.4s normal none infinite running load;
+    background: #0040ff none repeat scroll 0 0;
+}
+#loader .dot:nth-child(7n+5) {
+    transform: rotate(225deg);
+}
+#loader .dot:nth-child(7n+5)::before {
+    animation: 0.8s linear 0.5s normal none infinite running load;
+    background: #2a00ff none repeat scroll 0 0;
+}
+#loader .dot:nth-child(7n+6) {
+    transform: rotate(270deg);
+}
+#loader .dot:nth-child(7n+6)::before {
+    animation: 0.8s linear 0.6s normal none infinite running load;
+    background: #9500ff none repeat scroll 0 0;
+}
+#loader .dot:nth-child(7n+7) {
+    transform: rotate(315deg);
+}
+#loader .dot:nth-child(7n+7)::before {
+    animation: 0.8s linear 0.7s normal none infinite running load;
+    background: magenta none repeat scroll 0 0;
+}
+#loader .dot:nth-child(7n+8) {
+    transform: rotate(360deg);
+}
+#loader .dot:nth-child(7n+8)::before {
+    animation: 0.8s linear 0.8s normal none infinite running load;
+    background: #ff0095 none repeat scroll 0 0;
+}
+#loader .lading {
+    background-image: url("../images/loading.gif");
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    bottom: -40px;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    width: 180px;
+}
+@keyframes load {
+100% {
+    opacity: 0;
+    transform: scale(1);
+}
+}
+@keyframes load {
+100% {
+    opacity: 0;
+    transform: scale(1);
+}
+}
+@media only screen and (max-width: 993px) {
+	#multiple-choice-container label.btn {
+		width:100% !important;
+		float:none;
+		margin-left:0%;
+		margin-right:0%;
+	}
+}

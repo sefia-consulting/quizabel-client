@@ -1,0 +1,205 @@
+
+
+.designer-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.designer-links-layer, .designer-questions-layer, .designer-temporary-link-layer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.designer-questions-layer, .designer-temporary-link-layer {
+    pointer-events: none;
+}
+
+.designer-temporary-link-layer {
+    display: none;
+}
+
+
+
+.designer-link, .designer-question {
+    cursor: default;
+}
+
+
+.designer-question-connector {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.designer-question-connector-label {
+    font-size: small;
+}
+
+.designer-question-inputs .designer-question-connector-label {
+    margin-left: 14px;
+}
+
+.designer-question-answers .designer-question-connector-label {
+    text-align: right;
+    margin-right: 5px;
+}
+
+.designer-question-connector-arrow {
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid rgb(204, 204, 204);
+    position: absolute;
+    top: 0px;
+}
+
+.designer-question-connector-small-arrow {
+    width: 0px;
+    height: 0px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent; /*rgb(100, 100, 100);*/
+    position: absolute;
+    top: 5px;
+    pointer-events: none;
+}
+
+.designer-question-connector:hover .designer-question-connector-arrow {
+    border-left: 10px solid rgb(153, 153, 153);
+}
+
+.designer-question-inputs .designer-question-connector-arrow {
+    left: -1px;
+}
+
+.designer-question-answers .designer-question-connector-arrow {
+    right: -10px;
+}
+
+.designer-question-inputs .designer-question-connector-small-arrow {
+    left: -1px;
+}
+
+.designer-question-answers .designer-question-connector-small-arrow {
+    right: -7px;
+}
+
+.unselectable {
+   -moz-user-select: none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
+
+/* Default Operator */
+
+.designer-question {
+    position: absolute;
+    width: 140px;
+    border: 1px solid #CCCCCC;
+    background: #FAFAFA;
+    pointer-events: initial;
+}
+
+.designer-question.selected {
+    border-color: #888;
+    border-width:2px;
+    border-radius:7px;
+}
+.designer-question.selected .designer-question-connector-arrow {
+    border-left: 10px solid #888;
+}
+
+.designer-question .designer-question-title {
+    width: 100%;
+    padding: 5px;
+    font-weight: bold;
+    box-sizing: border-box;
+    border-bottom: 1px solid #DDDDDD;
+    background: #F0F0F0;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: move;/**/
+}
+
+.designer-question .designer-question-inputs-answers {
+    display: table;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.designer-question .designer-question-inputs, .designer-default-question .designer-question-answers {
+    display: table-cell;
+    width: 50%;
+}
+/*custom*/
+
+.designer-question-answers .designer-question-connector-label {
+    border-left:1px solid rgb(204, 204, 204);
+    border-top:1px solid rgb(204, 204, 204);
+    border-bottom:1px solid rgb(204, 204, 204);
+    padding-right:5px;
+    padding-top:5px;
+    padding-bottom:5px;
+    margin-right: 0;
+    font-size:11px;
+    text-align: center;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color:#dedede;
+    min-height: 30px;
+}
+.designer-question-connector-sublabel {
+    border-left:1px solid rgb(204, 204, 204);
+    border-top:1px solid rgb(204, 204, 204);
+    border-bottom:1px solid rgb(204, 204, 204);
+    padding-right:0px;
+    padding-top:5px;
+    padding-bottom:5px; 
+    margin-right: -5px;
+    margin-left: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color:#eee;
+}
+.designer-question.selected .designer-question-answers .designer-question-connector-label {
+    border-color: #888;
+    border-width: 2px 0 2px 2px;
+}
+.designer-question-answers .designer-question-connector-arrow {
+    top: 10px;
+}
+.designer-question-inputs .designer-question-connector-arrow {
+    top: 2px;
+}
+
+.designer-question-answers .designer-question-connector-small-arrow {
+    top: 15px;
+}
+.designer-question-inputs .designer-question-connector-small-arrow {
+    top: 7px;
+}
+
+.designer-question .designer-question-inputs, .designer-default-question {
+    display: table-cell;
+    width: 5%;
+}
+.designer-question-inputs .designer-question-connector-label {
+    color:transparent;
+}

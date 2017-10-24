@@ -1,0 +1,159 @@
+<html>
+<head>
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/lib/animate/animate.css" />
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/lib/slider/bootstrap-slider.css" />
+<link rel="stylesheet" href="/lib/bootstrap-rating/bootstrap-rating.css" />
+<link rel="stylesheet" href="/css/player.css" />
+
+<script type="text/javascript" src="/js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/lib/notify/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/lib/progressTimer/jquery.progressTimer.js"></script>
+<script type="text/javascript" src="/lib/timer/timer.jquery.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap-rating/bootstrap-rating.js"></script>
+<script type="text/javascript" src="/js/player.js"></script>
+
+</head>
+<body>
+    <div id="loading-container" class="container">
+    	<div class="row">
+    		<div id="loader">
+        		<div class="dot"></div>
+    			<div class="dot"></div>
+    			<div class="dot"></div>
+    			<div class="dot"></div>
+    			<div class="dot"></div>
+    			<div class="dot"></div>
+    			<div class="dot"></div>
+    			<div class="dot"></div>
+    			<div class="lading text-center"><asset:image class="image logo" src="TEAM_miresource_logo_grey.svg" alt="Quizabel logo" style=""/></div>
+    		</div>
+    	</div>
+    </div>	
+	<div class="decision-container" style="display:none;">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div id="decision-tree-name-container" class="decision-item row">
+					<h2 id="decision-tree-name" style="margin-top:5px;margin-bottom: 0px;">Loading...
+					</h2>
+					<p id="decision-tree-description" class="lead">
+					</p>
+				</div>
+				<div id="context-container" class="decision-item row" style="display:none;">
+					<small id="concerning">Concerning</small>
+					<h4 id="context-display"></h4>
+				</div>
+			</div>
+			<div class="panel-body" style="padding: 5px 15px 15px 15px;">
+				<div id="decision-tree-image" class="decision-item" style="padding-top:20px"></div>
+				<div id="welcome-message" class="decision-item lead" style="display:none;">
+				</div>
+				<div id="finish-message-container" class="decision-item lead" style="display:none;">
+				</div>
+				<div id="message-container" class="decision-item row" style="display:none;">
+					<div id="message" class="alert alert-info col-md-offset-2 col-md-8"></div>
+				</div>
+				<div id="access-code-container" class="decision-item row" style="display:none;">
+					<div id="context-token-container" class="form-group text-center col-md-offset-4 col-md-4">
+					<label>
+						Access code:
+					</label>
+						<input id="contextToken" type="text" class="form-control" name="contextToken" value="" placeholder="Access Code"/>
+					</div>
+				</div>
+				<div id="question-container" class="decision-item row" style="display:none;">
+					<div id="decision-timer" class="decision-item" style="text-align:right"></div>
+					<div id="question-timer" class="decision-item"></div>				
+					<div id="question-image" class="decision-item" style="padding-top:20px"></div>
+					<h2 id="question-text"></h2>
+					<div id="singleMultipleChoice" class="decision-item question-type" style="display:none;"></div>
+					<div id="multipleMultipleChoice" class="decision-item question-type" style="display:none;">
+						<div id="multiple-choice-container"></div>
+						<div class="row submit-container">
+							<div class="col-md-offset-4 col-md-4">
+							<button id="multiple-choice-submit" type="button" class="btn btn-primary">
+								Submit
+							</button>
+							</div>
+						</div>
+					</div>
+					<div id="shortAnswer" class="decision-item question-type" style="display:none;">
+						<div class="row">
+							<div id="short-answer-container" class="col-md-offset-4 col-md-4">
+								<input id="short-answer-text" type="text" class="form-control" name="short-answer-text"/>
+							</div>
+						</div>
+						<div class="row submit-container">
+							<div class="col-md-offset-4 col-md-4">
+							<button id="short-answer-submit" type="button" class="btn btn-primary">
+								Submit
+							</button>
+							</div>
+						</div>
+					</div>
+					<div id="scale" class="decision-item question-type" style="display:none;">
+						<div class="row">
+							<div id="scale-container" style="padding-top:0px;margin-top:0px;">
+							</div>
+						</div>
+						<div class="row" style="margin-bottom:0px">
+							<div id="scale-left-label" class="col-xs-offset-2 col-xs-3 col-md-offset-3 col-md-2 text-left"/></div>
+							<div id="scale-center-label" class="col-xs-2 text-center" style=""></div>
+							<div id="scale-right-label" class="col-xs-3 col-md-2 text-right"></div>
+						</div>
+						<div class="row submit-container">
+							<div class="col-md-offset-4 col-md-4">
+							<button id="scale-submit" type="button" class="btn btn-primary">
+								Submit
+							</button>
+							</div>
+						</div>
+					</div>
+					<div id="question-points-container" class="decision-item">
+						<span id="question-points"></span>
+						Points
+					</div>
+				</div>
+				<div id="completed-title" class="decision-item row" style="display:none;">
+					<h3>Thank you!</h3>
+				</div>
+				<div id="summary-container" class="decision-item row" style="display:none;">
+				</div>
+				<div id="start-container" class="decision-item" style="display:none;">
+					<button id="start-button" class="btn btn-primary" type="button">
+						Start
+					</button>
+				</div>
+				<button id="complete-button" class="decision-item btn btn-primary" type="button" style="display:none;">
+					Continue
+				</button>
+				<div id="more-actions-container" class="row">
+					<h5 id="more-info-link" class="decision-item more-action-link" style="display:none;">More info</h5>
+					<h5 id="skip-link" class="decision-item more-action-link" style="display:none;">Skip</h5>
+					<h5 id="back-link" class="decision-item more-action-link" style="display:none;">Back</h5>
+					<h5 id="restart-link" class="decision-item more-action-link" style="display:none;">Back to Beginning</h5>
+					<h5 id="retake-link" class="decision-item more-action-link" style="display:none;">Retake</h5>
+				</div>    
+			</div>
+		</div>
+
+	</div>
+	<!-- Modal -->
+	<div id="timer-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-body text-center">
+					<h2>
+					Oops!
+					</h2>
+					<h3>You have run out of time.</h3>
+					<button type="button" class="btn btn-primary" id="timer-modal-continue">Continue</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+</body>
+</html>
