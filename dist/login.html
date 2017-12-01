@@ -1,0 +1,172 @@
+<html>
+    <head>
+    <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/lib/jquery/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="/lib/aws/aws-cognito-sdk.min.js"></script>
+    <script src="/lib/aws/amazon-cognito-identity.min.js"></script>
+    <script type="text/javascript" src="./js/quizabel-cognito.js"></script>
+    
+    <style>
+/* Credit to bootsnipp.com for the css for the color graph */
+.colorgraph {
+  height: 5px;
+  border-top: 0;
+  background: #c4e17f;
+  border-radius: 5px;
+  background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+}        
+    </style>
+    <script>
+        
+
+function auth() {
+    var username = $('#email').val(),
+        password = $('#password').val();
+
+    var authenticationData = {
+        Username: username,
+        Password : password
+    };
+    var userData = {
+        Username: username,
+        Pool : userPool
+    };
+    var authenticationDetails = new AWSCognito.CognitoIdentityServiceProvider.AuthenticationDetails(authenticationData);
+    var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
+    cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: function (result) {
+            console.log(result);
+            console.log('access token + ' + result.getAccessToken().getJwtToken());
+            document.location.href = '/designer.html';
+        },
+
+        onFailure: function(err) {
+            console.log(err);
+            alert(err);
+        },
+        mfaRequired: function(codeDeliveryDetails) {
+            // MFA is required to complete user authentication.
+            // Get the code from user and call
+            cognitoUser.sendMFACode(mfaCode, this)
+        },
+
+        newPasswordRequired: function(userAttributes, requiredAttributes) {
+            alert('need a new password, setting to '+password);
+            // User was signed up by an admin and must provide new
+            // password and required attributes, if any, to complete
+            // authentication.
+
+            // the api doesn't accept this field back
+            delete userAttributes.email_verified;
+
+            // Get these details and call
+            cognitoUser.completeNewPasswordChallenge(password, userAttributes, this);
+        }
+    });    
+}
+
+
+$(function(){
+    $('#login-btn').on('click', auth);
+    $('.button-checkbox').each(function(){
+		var $widget = $(this),
+			$button = $widget.find('button'),
+			$checkbox = $widget.find('input:checkbox'),
+			color = $button.data('color'),
+			settings = {
+					on: {
+						icon: 'glyphicon glyphicon-check'
+					},
+					off: {
+						icon: 'glyphicon glyphicon-unchecked'
+					}
+			};
+
+		$button.on('click', function () {
+			$checkbox.prop('checked', !$checkbox.is(':checked'));
+			$checkbox.triggerHandler('change');
+			updateDisplay();
+		});
+
+		$checkbox.on('change', function () {
+			updateDisplay();
+		});
+
+		function updateDisplay() {
+			var isChecked = $checkbox.is(':checked');
+			// Set the button's state
+			$button.data('state', (isChecked) ? "on" : "off");
+
+			// Set the button's icon
+			$button.find('.state-icon')
+				.removeClass()
+				.addClass('state-icon ' + settings[$button.data('state')].icon);
+
+			// Update the button's color
+			if (isChecked) {
+				$button
+					.removeClass('btn-default')
+					.addClass('btn-' + color + ' active');
+			}
+			else
+			{
+				$button
+					.removeClass('btn-' + color + ' active')
+					.addClass('btn-default');
+			}
+		}
+		function init() {
+			updateDisplay();
+			// Inject the icon if applicable
+			if ($button.find('.state-icon').length == 0) {
+				$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+			}
+		}
+		init();
+	});
+});
+    </script>
+</head>
+<body>
+    <div class="container">
+            
+        <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form role="form">
+                    <fieldset>
+                        <h2>Please Sign In</h2>
+                        <hr class="colorgraph">
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+                        </div>
+                        <div class="text-right">
+                            <small>
+                            <a href="forgot.html">Forgot Password?</a>
+                            <br/>
+                            <a href="reset.html">Enter Verification Code</a>
+                            </small>
+                        </div>
+                        <hr class="colorgraph">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <a id="login-btn" href="#" class="btn btn-lg btn-success btn-block" >Sign In</a>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <a href="register.html" class="btn btn-lg btn-primary btn-block">Register</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+            
+    </div>
+</body>
+</html>

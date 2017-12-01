@@ -19,6 +19,11 @@
 		<li><a class="home" href="/">Home</a></li>
 		<li><a class="list" href="/list.html">List</a></li>
 		<li>Design Quiz</li>
+		<span class="pull-right">
+			<a href="/designer.html">New Quiz</a>
+			&nbsp;&nbsp;&nbsp;
+			<a href="#" id="logout">Logout</a>
+		</span>
 	</ul>
 </div>
 
@@ -774,13 +779,28 @@
 
 	</div>
 </div>
-<script type="text/javascript" src="./js/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="./js/jquery-ui-1.11.4.min.js"></script>
-<script type="text/javascript" src="./js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="./lib/jquery/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="./lib/jquery/jquery-ui-1.11.4.min.js"></script>
+<script type="text/javascript" src="./lib/jquery/jquery.ui.touch-punch.min.js"></script>
 <script type="text/javascript" src="./lib/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="./lib/designer/jquery.designer.js"></script>
 <script type="text/javascript" src="./lib/notify/bootstrap-notify.min.js"></script>
 <script type="text/javascript" src="./lib/featherlight/featherlight.min.js"></script>
+<script type="text/javascript" src="/lib/aws/aws-cognito-sdk.min.js"></script>
+<script type="text/javascript" src="/lib/aws/amazon-cognito-identity.min.js"></script>
+<script type="text/javascript" src="./js/quizabel-cognito.js"></script>
 <script type="text/javascript" src="./js/designer.js"></script>
+<script>
+	if (!currentUser) {
+		document.location.href = '/login.html';
+	}
+	$(document).ready(function() {
+		$('#logout').on('click', function() {
+			currentUser.signOut();
+			document.location.reload();
+		});
+	});
+</script>
+
 </body>
 </html>

@@ -1,0 +1,86 @@
+<html>
+        <head>
+        <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css" />
+        <script type="text/javascript" src="/lib/jquery/jquery-2.2.0.min.js"></script>
+        <script type="text/javascript" src="/lib/bootstrap/js/bootstrap.js"></script>
+        <script src="/lib/aws/aws-cognito-sdk.min.js"></script>
+        <script src="/lib/aws/amazon-cognito-identity.min.js"></script>
+        <script type="text/javascript" src="./js/quizabel-cognito.js"></script>
+        <style>
+    /* Credit to bootsnipp.com for the css for the color graph */
+    .colorgraph {
+      height: 5px;
+      border-top: 0;
+      background: #c4e17f;
+      border-radius: 5px;
+      background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+      background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+      background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+      background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+    }        
+        </style>
+        <script>
+    function forgot() {
+        var username = $('#email').val();
+        var userData = {
+            Username: username,
+            Pool : userPool
+        };
+        var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);        
+        cognitoUser.forgotPassword({
+            onSuccess: function (data) {
+                console.log(data);
+                alert(data);
+            },
+            onFailure: function(err) {
+                console.log(err);
+                alert(err);
+            },
+            //Optional automatic callback
+            inputVerificationCode: function(data) {
+                document.location.href = 'reset.html?email='+encodeURIComponent(username);
+            }
+        });
+    }
+
+    $(function(){
+        $('#forgot-btn').on('click', forgot);
+    });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row" style="margin-top:20px">
+                <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                    <form role="form">
+                        <fieldset>
+                            <h2>Forgot Password?</h2>
+                            <hr class="colorgraph">
+                            <h4 class="">
+                                Please enter your email to reset your password.
+                            </h4>
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address">
+                            </div>
+                            <div class="text-right">
+                                <small>
+                                <a href="reset.html">Enter Verification Code</a>
+                                </small>
+                            </div>
+        
+                            <hr class="colorgraph">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <button type="button" id="forgot-btn" class="btn btn-lg btn-success btn-block">Submit</button>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <a href="login.html" class="btn btn-lg btn-primary btn-block">Return to Sign In</a>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

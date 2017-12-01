@@ -1,7 +1,8 @@
 var data = {
 		questions: {}
 	},
-	newDecisionTree = true;
+	newDecisionTree = true,
+	baseUrl = 'https://gxffk1lnf4.execute-api.us-east-1.amazonaws.com/dev/quiz/';
 
 var QUESTION_ATTS = {
 	'designer.validation':'question.validation',
@@ -134,7 +135,7 @@ function revert() {
 	if (typeof(Storage) !== "undefined") {
 		localStorage.removeItem("decisionTree:"+(newDecisionTree?'new':$('[name="decisionTree.id"]').val()));
 	}
-	document.location.href = '/resources/admin/decisionTree/designer'+(newDecisionTree?'':'/'+$('[name="decisionTree.id"]').val());
+	document.location.href = '/designer.html'+(newDecisionTree?'':'#'+$('[name="decisionTree.id"]').val());
 }
 
 function showQuestionModal(questionId) {
@@ -217,7 +218,7 @@ function saveModalQuestion() {
 			var l = $(itm).children('span').text().trim();
 
 			if (l) {
-				var ansCfg = questionData.answers[code] || {code: code, class:'single-answer'};
+				var ansCfg = answers[code] || {code: code, class:'single-answer'};
 				ansCfg.label = l != '(no text)' ? l : '';
 				ansCfg.correct = correct;
 				answers[code] = ansCfg;
@@ -397,7 +398,7 @@ function handleCorrectCheckbox(elem) {
 
 function getUpdatedData() {
 	var treeData = $('#decision-tree-canvas').designer('getData');
-	treeData.dbId = $('input[name="decisionTree.id"]').val();
+	treeData.id = $('input[name="decisionTree.id"]').val();
 	if ($('input[name="decisionTree.version"]').val()) treeData.version = parseInt($('input[name="decisionTree.version"]').val());
 	treeData.newDecisionTree = newDecisionTree;
 	treeData.code = $('input[name="decisionTree.code"]').val();
@@ -453,8 +454,7 @@ function getUpdatedData() {
 }
 
 function updateDecisionTreeForm() {
-	if (data.dbId) $('input[name="decisionTree.id"]').val(data.dbId);
-	if (data.code) $('input[name="decisionTree.code"]').val(data.code);
+	if (data.id) $('input[name="decisionTree.id"]').val(data.id);
 	if (data.version) $('input[name="decisionTree.version"]').val(data.version);
 	else $('input[name="decisionTree.version"]').val(null);
 	if (data.name) $('#decision-tree-name').text(data.name);
@@ -524,11 +524,9 @@ function updateDecisionTreeForm() {
 		$('[name="contextTokenOneTime"]').attr('disabled', true);
 		$('[name="contextTokenValidation"]').attr('disabled', true);
 	}
-	if (data.dbId) {
-		$('#edit-decision-tree').attr('href', '/resources/admin/decisionTree/edit/'+data.dbId);
-		$('#results-decision-tree').attr('href', '/resources/admin/decisionTree/responseReport/'+data.dbId);
-		$('#back-decision-tree').attr('href', '/resources/admin/decisionTree/show/'+data.dbId);
-		$('#take-decision-tree').attr('href', '/resources/decisions/show/'+data.code);	
+	if (data.id) {
+		$('#results-decision-tree').attr('href', '/results.html#'+data.id);
+		$('#take-decision-tree').attr('href', '/player.html#'+data.id);	
 		$('.new-feature').hide();
 		$('.edit-feature').show();
 	} else {
@@ -542,16 +540,28 @@ function saveDecisionTree(callback) {
 	console.log(treeData);
 	var treeJSON = JSON.stringify(treeData);
 	try {
+		var serviceUrl = baseUrl,
+			method = 'POST';
+		if (!treeData.id) {
+			serviceUrl += 'create';
+		} 
+		else {
+			serviceUrl += 'update/'+data.id;
+			method = 'PUT';
+		}
+		console.log(serviceUrl);
 		$.ajax({
-			type: "POST",
-			url: "/resources/admin/decisionTree/saveDesign"+(treeData.dbId?'/'+treeData.dbId:''),
+			type: method,
+			url: serviceUrl,
 			data: treeJSON,
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			success: function(data){
 				console.log(data);
-				if (data.dbId) $('input[name="decisionTree.id"]').val(data.dbId);
-				if (data.code) $('input[name="decisionTree.code"]').val(data.code);
+				if (data.id) {
+					$('input[name="decisionTree.id"]').val(data.id);
+					document.location.hash = '#'+data.id;
+				}
 				$.notify({
 					message: (data.message || 'Changes committed.')
 				},{
@@ -563,13 +573,11 @@ function saveDecisionTree(callback) {
 					type: (data.level || 'info')
 				});
 				$('#save-decision-tree').text('Commit');
-				$('#take-decision-tree').parent('a').attr('href','/resources/survey/'+data.code)
+				$('#take-decision-tree').parent('a').attr('href','/player.html#'+data.id)
 				$('#take-decision-tree').show();
-				$('#revert-decision-tree').parent('a').attr('href','/resources/admin/decisionTree/designer/'+data.dbId)
+				$('#revert-decision-tree').parent('a').attr('href','/designer.html#'+data.id)
 				$('#revert-decision-tree').show();
-				$('#edit-decision-tree').parent('a').attr('href','/resources/admin/decisionTree/show/'+data.dbId)
-				$('#edit-decision-tree').show();
-				$('#results-decision-tree').parent('a').attr('href','/resources/admin/decisionTree/responseReport/'+data.dbId)
+				$('#results-decision-tree').parent('a').attr('href','/results.html#'+data.id)
 				$('#results-decision-tree').show();
 				$('#revert-decision-tree').prop("disabled",true);
 				if (typeof(Storage) !== "undefined") {
@@ -629,39 +637,35 @@ function checkForUncommittedData(code) {
 	return rtn;
 }
 
+
 function loadDecisionTree() {
 	var paths = location.pathname.split('/'),
 		i = paths.length -1,
-		id;
-	newDecisionTree = true;
-	while (!id && i >= 0) {
-		id = paths[i];
-		if (id) {
-			if ($.isNumeric(id) || id != 'designer') {
-				newDecisionTree = false;
-				break;
-			}
-			else if (id == 'designer') {
-				break;
-			}
-		}
-		i--;
-	}
+		id = window.location.hash;//getUrlParameter('id');
+	newDecisionTree = id ? false : true;
+	
 	if (newDecisionTree) {
 		checkForUncommittedData('new');
 		$('#decision-tree-canvas').designer({data:data, onAfterChange:handleChange});
 		updateDecisionTreeForm();
 	}
 	else {
+		id = id.substring(1);
 		if (!checkForUncommittedData(id)) {
+			console.log(baseUrl+id);
 			$.ajax({
 				type: "GET",
-				url: "/resources/admin/decisionTree/designerData/"+id,
-				dataType: "json",
+				url: baseUrl+id,
+				//dataType: "json",
+				crossDomain: true,
+				contentType: 'application/json',
 				success: function(returnData){
 					console.log(returnData);
+					newDecisionTree = returnData.id == null;
+					if (newDecisionTree) {
+						alert('Quiz "'+id+'" not found.');
+					}
 					data = returnData;
-					newDecisionTree = false;
 					updateDecisionTreeForm();
 					$('#decision-tree-canvas').designer({data:data, onAfterChange:handleChange});
 					$('#revert-decision-tree').prop("disabled",true);
@@ -693,6 +697,7 @@ function loadDecisionTree() {
 }
 
 $(document).ready(function() {
+	
 	loadDecisionTree();
 	////////////////	
 	// handler stuff
@@ -794,7 +799,7 @@ $(document).ready(function() {
 		var href = $('[name="'+$(this).attr('for')+'"]').val();
 		if (href) window.open(href);
 	});
-	if (newDecisionTree) {
+	if (newDecisionTree && !data.questions) {
 		$('#question-modal').modal('show');
 		$('.new-feature').show();
 		$('.edit-feature').hide();
