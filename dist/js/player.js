@@ -1,4 +1,8 @@
-var reverseGeocodeAPIKey = '9f303e22bd843d355107';
+var reverseGeocodeAPIKey = '9f303e22bd843d355107',
+	accessCodeBaseUrl = 'https://gxffk1lnf4.execute-api.us-east-1.amazonaws.com/dev/accessCode/',
+	quizBaseUrl = 'https://9jxch42319.execute-api.us-east-1.amazonaws.com/dev/quiz/',
+	totalsBaseUrl = 'https://0bazdhmlk9.execute-api.us-east-1.amazonaws.com/dev/totals/',
+	resultBaseUrl = 'https://ulznycrzqi.execute-api.us-east-1.amazonaws.com/dev/result/';
 
 var decisionTree,
 	decision = { // need user data
@@ -38,8 +42,8 @@ function initPlayer(loaded) {
 		$('#loading-container').fadeOut('slow', 'linear', function() {
 			$('.decision-container').fadeIn('slow');
 			if (c) {
-				var key = "decision:progress:"+decisionTree.code,
-					key2 = "decision:responses:"+decisionTree.code;
+				var key = "decision:progress:"+decisionTree.id,
+					key2 = "decision:responses:"+decisionTree.id;
 				localStorage.removeItem(key);
 				localStorage.removeItem(key2);				
 			}
@@ -49,13 +53,13 @@ function initPlayer(loaded) {
 	inited = true;
 }
 
-function checkForUncommittedDecision(code) {
+function checkForUncommittedDecision(id) {
 	// dev
 	//if (true) return false;
 	var rtn = false;
 	$(document).on('click', '.load-btn,.no-load-btn', function() {
-		var key = "decision:progress:"+code,
-			key2 = "decision:responses:"+code,
+		var key = "decision:progress:"+id,
+			key2 = "decision:responses:"+id,
 			loaded = false;
 		if ($(this).hasClass('load-btn')) {
 			var decisionJSON = localStorage.getItem(key),
@@ -78,8 +82,8 @@ function checkForUncommittedDecision(code) {
 		initPlayer(loaded);
 	});
 	if (typeof(Storage) !== "undefined") {
-		var key = "decision:progress:"+code,
-			key2 = "decision:responses:"+code;
+		var key = "decision:progress:"+id,
+			key2 = "decision:responses:"+id;
 		var decisionJSON = localStorage.getItem(key),
 			allResponsesJSON = localStorage.getItem(key2);
 		if (decisionJSON || allResponsesJSON) {
@@ -105,7 +109,7 @@ function checkForUncommittedDecision(code) {
 
 function updateDecision() {
 	decision.name = decisionTree.name;
-	decision.code = decisionTree.code;
+	decision.quizId = decisionTree.id;
 	decision.welcomeMessage = decisionTree.welcomeMessage;
 	decision.finishMessage = decisionTree.finishMessage;
 	decision.description = decisionTree.description;
@@ -144,27 +148,25 @@ function fetchLocation(callback) {
 	});
 }
 
-
-
 function loadDecisionTree(id) {
 	$.ajax({
 		type: "GET",
-		url: "/resources/decision/decisionTreeData/"+id,
+		url: quizBaseUrl+id,
 		dataType: "json",
 		success: function(returnData){
 			console.log(returnData);
-			if (returnData.success) {
-				decisionTree = returnData.decisionTree;
+			if (returnData.id) {
+				decisionTree = returnData;
 				if (decisionTree.requireLogin && !returnData.loggedIn) {
-					document.location.href = '/resources/login/auth?redirectUrl='+encodeURIComponent(document.location.href);
+					document.location.href = '/login.html?redirectUrl='+encodeURIComponent(document.location.href);
 					return;
 				}
 				if (decisionTree.theme) {
-					$('head').append('<link rel="stylesheet" href="/resources/assets/'+decisionTree.theme+'" type="text/css" />');
+					$('head').append('<link rel="stylesheet" href="/css/'+decisionTree.theme+'" type="text/css" />');
 				}				
 
 				if (decisionTree.saveUncommitted) {
-					checkForUncommittedDecision(decisionTree.code);
+					checkForUncommittedDecision(decisionTree.id);
 				}
 				else {
 					initPlayer(false);
@@ -193,7 +195,7 @@ function validateAccessCode(code, callback) {
 	var rtn;
 	$.ajax({
 		type: "GET",
-		url: "/resources/decision/validationAccessCode/"+decisionTree.code+'?ac='+encodeURIComponent(code),
+		url: accessCodeBaseUrl+"validate/"+decisionTree.id+'?ac='+encodeURIComponent(code),
 		dataType: "json",
 		success: function(returnData){
 			callback(returnData);
@@ -206,23 +208,14 @@ function validateAccessCode(code, callback) {
 
 $(document).ready(function() {
 	initHandlers();
-	var paths = location.pathname.split('/'),
-		i = paths.length -1,
-		id;
-	while (!id && i >= 0) {
-		id = paths[i];
-		if (id) {
-			if ($.isNumeric(id) || id != 'decision') {
-				break;
-			}
-			else if (id == 'decision') {
-				id = null;
-				break;
-			}
-		}
-		i--;
+	var id = document.location.hash;
+	id = id ? id.substring(1) : null;
+	if (!id) {
+		alert('Quiz Id not specified');
 	}
-	loadDecisionTree(id);
+	else {
+		loadDecisionTree(id);		
+	}
 });
 
 function populateFinishMessages() {
@@ -241,9 +234,9 @@ function populateFinishMessages() {
 function commitDecisionLocal(callback) {
 	// need to post this up
 	if (typeof(Storage) !== "undefined") {
-		var code = decision.code,
+		var id = decision.id,
 			rando = makeId();
-		localStorage.setItem('decision:'+code+':'+rando, JSON.stringify(decision));
+		localStorage.setItem('decision:'+id+':'+rando, JSON.stringify(decision));
 	}
 	if (callback) callback();
 }
@@ -279,7 +272,7 @@ function commitDecision(callback) {
 	var playerJSON = JSON.stringify(decision);
 	$.ajax({
 		type: "POST",
-		url: "/resources/decision/saveDecisionData",
+		url: resultBaseUrl+"create",
 		data: playerJSON,
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
@@ -297,9 +290,9 @@ function commitDecision(callback) {
 
 function cleanUp() {
 	if (typeof(Storage) !== "undefined") {
-		var code = decision.code,
-			key = "decision:progress:"+code,
-			key2 = "decision:responses:"+code;
+		var id = decision.id,
+			key = "decision:progress:"+id,
+			key2 = "decision:responses:"+id;
 		localStorage.removeItem(key);
 		localStorage.removeItem(key2);
 	}
@@ -603,9 +596,9 @@ function saveProgress() {
 	if (decisionTree.saveUncommitted && typeof(Storage) !== "undefined") {
 		console.log(decision);
 		var storageJSON = JSON.stringify(decision);
-		localStorage.setItem("decision:progress:"+decisionTree.code, storageJSON);
+		localStorage.setItem("decision:progress:"+decisionTree.id, storageJSON);
 		storageJSON = JSON.stringify(allResponses);
-		localStorage.setItem("decision:responses:"+decisionTree.code, storageJSON);
+		localStorage.setItem("decision:responses:"+decisionTree.id, storageJSON);
 	}
 }
 
@@ -815,11 +808,11 @@ function saveResponse(prms) {
 	return response;
 }
 
-function fetchTotals(code, callback) {
+function fetchTotals(id, callback) {
 	var rtn;
 	$.ajax({
 		type: "GET",
-		url: "/resources/decision/decisionTotals/"+code,
+		url: totalsBaseUrl+"get/"+id,
 		dataType: "json",
 		success: function(returnData){
 			callback(returnData);
@@ -1163,7 +1156,7 @@ function paintCompleted() {
 		$('#retake-link').show();
 		jqSummary.show();
 		if (decisionTree.showTotals) {
-			fetchTotals(decision.code, function(results) {
+			fetchTotals(decision.quizId, function(results) {
 				console.log(results);
 				if (results.success) {
 					$.each(results.questionsData, function(iii, questionData) {

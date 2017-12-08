@@ -1,8 +1,8 @@
 var data = {
 		questions: {}
 	},
-	newDecisionTree = true,
-	baseUrl = 'https://gxffk1lnf4.execute-api.us-east-1.amazonaws.com/dev/quiz/';
+	newDecisionTree = true,	
+	baseUrl = 'https://9jxch42319.execute-api.us-east-1.amazonaws.com/dev/quiz/';
 
 var QUESTION_ATTS = {
 	'designer.validation':'question.validation',
@@ -526,13 +526,17 @@ function updateDecisionTreeForm() {
 	}
 	if (data.id) {
 		$('#results-decision-tree').attr('href', '/results.html#'+data.id);
-		$('#take-decision-tree').attr('href', '/player.html#'+data.id);	
 		$('.new-feature').hide();
 		$('.edit-feature').show();
+		$('#take-decision-tree').attr('href', '/player.html#'+data.id);
 	} else {
 		$('.new-feature').show();
 		$('.edit-feature').hide();
 	}
+	$(document).on('click','.edit-feature', function() {
+		document.location.href = $(this).attr('href');	
+	});
+	
 }
 
 function saveDecisionTree(callback) {
@@ -573,11 +577,11 @@ function saveDecisionTree(callback) {
 					type: (data.level || 'info')
 				});
 				$('#save-decision-tree').text('Commit');
-				$('#take-decision-tree').parent('a').attr('href','/player.html#'+data.id)
+				$('#take-decision-tree').attr('href','/player.html#'+data.id)
 				$('#take-decision-tree').show();
-				$('#revert-decision-tree').parent('a').attr('href','/designer.html#'+data.id)
+				$('#revert-decision-tree').attr('href','/designer.html#'+data.id)
 				$('#revert-decision-tree').show();
-				$('#results-decision-tree').parent('a').attr('href','/results.html#'+data.id)
+				$('#results-decision-tree').attr('href','/results.html#'+data.id)
 				$('#results-decision-tree').show();
 				$('#revert-decision-tree').prop("disabled",true);
 				if (typeof(Storage) !== "undefined") {
@@ -640,7 +644,6 @@ function checkForUncommittedData(code) {
 
 function loadDecisionTree() {
 	var paths = location.pathname.split('/'),
-		i = paths.length -1,
 		id = window.location.hash;//getUrlParameter('id');
 	newDecisionTree = id ? false : true;
 	
