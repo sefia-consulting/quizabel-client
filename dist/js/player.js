@@ -15,6 +15,7 @@ var decisionTree,
 		responses: []
 	},
 	currentQuestion,
+	currentQuestionId,
 	allResponses = {},
 	inited = false,
 	notifyObj;
@@ -30,7 +31,10 @@ function makeId() {
 function initPlayer(loaded) {
 	if (inited) return;
 	updateDecision();
-	if (!decision.finished && decision.lastQuestion) {
+	/*if (!decision.finished && currentQuestionId) {
+		currentQuestion = decisionTree.questions[currentQuestionId];
+	}
+	else*/ if (!decision.finished && decision.lastQuestion) {
 		currentQuestion = decisionTree.questions[decision.lastQuestion];
 	}
 	else if (decision.contextToken) {
@@ -206,10 +210,24 @@ function validateAccessCode(code, callback) {
 	});	
 }
 
+function readQuizId() {
+	var id = document.location.hash;
+	if (id) {
+		var parts = id.split('/');
+		id = id ? parts[0].substring(1) : null;
+		if (parts.length > 1) {
+			currentQuestionId = parts[1];
+		}		
+	}
+	else {
+		id = null;
+	}
+	return id;
+}
+
 $(document).ready(function() {
 	initHandlers();
-	var id = document.location.hash;
-	id = id ? id.substring(1) : null;
+	var id = readQuizId();
 	if (!id) {
 		alert('Quiz Id not specified');
 	}
@@ -313,7 +331,7 @@ function handleChange(event, changeType, question, prevQuestion, suppressState) 
 		populateFinishMessages();
 		$(document).trigger('player.change',['decision.changed', null, null]);
 		updateUI({finished:true, finalQuestion: question, previousQuestion:prevQuestion});
-		if (suppressState != true) history.pushState('finish', null, document.location.pathname+"#finish");
+		if (suppressState != true) history.pushState('finish', null, document.location.pathname+"#"+decisionTree.id+"/finish");
 	}
 	else if (changeType == 'finish-timer-expired') {
 		decision.finished = new Date().getTime();
@@ -322,7 +340,7 @@ function handleChange(event, changeType, question, prevQuestion, suppressState) 
 		completeDecision();
 		$(document).trigger('player.change',['decision.changed', null, null]);
 		updateUI({finished:true, finalQuestion: question, previousQuestion:prevQuestion});
-		if (suppressState != true) history.pushState('finish', null, document.location.pathname+"#finish");
+		if (suppressState != true) history.pushState('finish', null, document.location.pathname+"#"+decisionTree.id+"/finish");
 	}
 	else if (changeType == 'complete') {
 		var lastCode = $('#complete-button').data('previous-question-code');
@@ -340,7 +358,7 @@ function handleChange(event, changeType, question, prevQuestion, suppressState) 
 					document.location.href = decision.destinationURI+finalQs;
 				}
 				else {
-					if (suppressState != true) history.pushState('complete', null, document.location.pathname+"#complete");
+					if (suppressState != true) history.pushState('complete', null, document.location.pathname+"#"+decisionTree.id+"/complete");
 					updateUI({completed:true});
 				}
 			}
@@ -351,7 +369,7 @@ function handleChange(event, changeType, question, prevQuestion, suppressState) 
 		decision.finished = null;
 		decision.duration = null;
 		updateUI({previousQuestion:prevQuestion});
-		if (suppressState != true) history.pushState(currentQuestion, null, document.location.pathname+"#"+currentQuestion.code);
+		if (suppressState != true) history.pushState(currentQuestion, null, document.location.pathname+"#"+decisionTree.id+"/"+currentQuestion.code);
 	}
 	else if (changeType == 'decision.changed') {
 		saveProgress();
@@ -829,6 +847,24 @@ function paintCurrentQuestion(previousQuestion, started) {
 		response = findResponseByQuestion() || allResponses[currentQuestion.code];
 	$('#question-container').show();
 	$('#question-image').empty();
+	/*
+	if (!previousQuestion) {
+		//search through links for currentquestion = toQuestion
+		for (var i = 0; i < decisionTree.links.length;i++) {
+			console.log(decisionTree.links[i]);
+			if (decisionTree.links[i].toQuestion == currentQuestion.code) {
+				var fakeQ = {
+					code: decisionTree.links[i].fromQuestion
+				};
+				if (findResponseByQuestion(fakeQ)) {
+					previousQuestion = decisionTree.questions[decisionTree.links[i].fromQuestion];
+					break;
+				}
+			}
+		}
+	}
+	*/
+	console.log(currentQuestion.displayText+'=>'+previousQuestion);
 	if (currentQuestion.imageURI) {
 		$('#question-image').append('<img src="'+currentQuestion.imageURI+'" class="img-responsive img-rounded" style="margin: 0 auto;"/>');
 		$('#question-image').show();
